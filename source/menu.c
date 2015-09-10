@@ -98,14 +98,23 @@ void menu_button()
 	/*первый уровень*/
 	if(menu_lvl == 0)
 	{
+		/*вверх по меню*/
 		if((PIND & (1<<btn_up))==0)
 		{
 			menu_lvl_1++;
+			if(menu_lvl_1 > lengthFirstMenuGr)
+			{
+				menu_lvl_1 = 3;
+			}
 			_delay_ms(150);
 		}
 		if((PIND & (1<<btn_down))==0)
 		{
 			menu_lvl_1--;
+			if(menu_lvl_1 < 0)
+			{
+				menu_lvl_1 = 0;
+			}
 			_delay_ms(150);
 		}
 		if((PIND & (1<<btn_ok))==0)
@@ -120,11 +129,19 @@ void menu_button()
 		if((PIND & (1<<btn_up))==0)
 		{
 			menu_lvl_2++;
+			if(menu_lvl_2 > lengthMenuSecond[menu_lvl_1])
+			{
+				menu_lvl_2 = lengthMenuSecond[menu_lvl_1];
+			}
 			_delay_ms(150);
 		}
 		if((PIND & (1<<btn_down))==0)
 		{
 			menu_lvl_2--;
+			if (menu_lvl_2 == 0)
+			{
+				menu_lvl_2 = 0;
+			}
 			_delay_ms(150);
 		}
 		if((PIND & (1<<btn_ok))==0)
@@ -186,11 +203,24 @@ void menu()
 		case 2:
 		/*тест*/
 			menu_button();
-			if ((menu_lvl_1 == 1) and (menu_lvl_2 == 0))
+			/*if ((menu_lvl_1 == 1) and (menu_lvl_2 == 0))
 			{
 				send_buffer(17,10,10,menu_setting);
 			}
 			send_buffer(0, 0, 0, menu_setting);
+			*/
+			/*если больше*/
+			if(setting_rele[menu_lvl_1][menu_lvl_2] > settingMenuUp[menu_lvl_1][menu_lvl_2])
+			{
+				setting_rele[menu_lvl_1][menu_lvl_2] = settingMenuUp[menu_lvl_1][menu_lvl_2]
+			}
+			/*если меньше*/
+			if(setting_rele[menu_lvl_1][menu_lvl_2] == settingMenuDown[menu_lvl_1][menu_lvl_2])
+			{
+				setting_rele[menu_lvl_1][menu_lvl_2] = settingMenuDown[menu_lvl_1][menu_lvl_2]
+			}
+			/*выводим на индикатор*/
+			/*продумать режим индикации параметров*/
 			break;
 	}
 }
