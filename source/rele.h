@@ -1,9 +1,12 @@
-﻿/*
- * rele.h
- *
- * Created: 01.08.2015 11:36:47
- *  Author: Alexander Shaburov
- */ 
+/******************************************************************************
+     * File: f_rele.c
+     * Description: заголовочнй файл
+     * Created: 01 авг 2015
+     * Copyright:
+     * Author: Александр Шабуров
+     * Email: alex38779@gmail.com
+
+******************************************************************************/
 
 #ifndef RELE_H_
 #define RELE_H_
@@ -16,23 +19,26 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 
-/*ОСНОВНЫЕ*/
+/*основные*/
 void gpio_init();
 void spi_init();
 void timer_init();
 void working_button();
-/*ИНДИКАЦИЯ*/
+
+/*индикация*/
 void send_buffer(uint8_t num1, uint8_t num2, uint8_t num3, uint8_t num4);
 void send_spi();
 void send_spi_data(uint16_t data);
 void send_buffer_data_2(uint8_t n1, uint8_t n2, uint8_t data);
 void send_buffer_spi();
 void indication_rele(uint8_t r_1, uint8_t mode_ind);
-/*МЕНЮ*/
+
+/*меню*/
 void menu_button();
-void menu_init();
+void menuInit();
 void menu();
-/*РЕЛЕ*/
+
+/*работа с реле*/
 /*инициализация реле*/
 void f_init_rele_1();
 /*работа реле*/
@@ -53,6 +59,7 @@ bool int_to_bool(uint8_t int_to);
 #define rele2_stop (0<<rele2)
 #define rele3_stop (0<<rele3)
 
+/*настройка пинов индикации*/
 #define led1 PC1
 #define led2 PC0
 #define led3 PC2
@@ -71,10 +78,47 @@ bool int_to_bool(uint8_t int_to);
 #define btn_ok PD1
 #define btn_back PD0
 
-/*дискретные датчики*/
-#define sensor_1  PC5
-#define sensor_2  PC4
-#define sensor_3  PC3
-
-static volatile uint8_t setting_rele[6][10]; 
+/*массив настроек реле*/
+static volatile uint8_t setting_rele[3][8] =
+{
+  /*----> 1 группа, основные параметры
+  * 01234567
+  * 0-настройка года
+  * 1-настройка месяца
+  * 2-настройка дня
+  * 3-настройка часов
+  * 4-настройка минут
+  * 5-настройка режима индикации
+  *   0-
+  *   1-
+  * 6-коррекция хода часов
+  */
+  {0,0,0,0,0,0,0,},
+  /*----> 2 группа, параметры 1 реле
+  * 01234567
+  * 0-активно ли реле
+  * 1-режим работы реле
+  *   0-не активно(по умолчанию)
+  *   1-запуск
+  *   2-
+  * 2-1 параметр
+  * 3-2 параметр
+  * 4-3 параметр
+  * 5-4 параметр
+  * 6-5 параметр
+  */
+  {0,0,0,0,0,0,0,},
+  /*----> 3 группа, системные настройки
+  * часть можно редактировать, часть нет -*
+  * 01234567
+  * 0-* версия прошивки
+  * 1-* сер номер
+  * 2-* дата прошивки
+  * 3-
+  *
+  *
+  *
+  */
+  {0,0,0,0,0,0,0,},
+};
 #endif /* RELE_H_ */
