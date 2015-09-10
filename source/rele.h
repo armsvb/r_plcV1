@@ -79,6 +79,11 @@ bool int_to_bool(uint8_t int_to);
 #define btn_ok PD1
 #define btn_back PD0
 
+/*часы, минуты, секнды*/
+uint8_t globalSecond;
+uint8_t globalMinute;
+uint8_t globalHour;
+
 /*массив настроек реле*/
 static volatile uint8_t setting_rele[3][8] =
 {

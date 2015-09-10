@@ -9,7 +9,7 @@
 ******************************************************************************/
 
 /*частота работы мк*/
-#define F_CPU 8000000UL
+//#define F_CPU 8000000UL
 
 /*инклудим*/
 #include "rele.h"
@@ -24,6 +24,12 @@ ISR(TIMER0_OVF_vect)
   send_buffer_spi();
   sost_rele();
   //working_button();
+}
+
+/*счет секунд*/
+ISR(TIMER2_OVF_vect)
+{
+	globalSecond++;
 }
 
 /*настройка IO*/
@@ -47,8 +53,16 @@ void timerInit()
   /*таймер Т0*/
   TCCR0 |= 1<<CS01;
   TCNT0 = 0xff;
-  TIMSK |= 1<<TOIE0;
   /*таймер Т1*/
+  /*таймер Т2 - часовой кварц*/
+  TIMSK &= ~((1<<TOIE2) | (1<<OCIE2));
+  ASSR |= 1<<AS2;
+  TCNT2 = 0x00;
+  TCCR2 = 0x05;
+  OCR2 = 0x80;
+  while(ASSR & ((1<<TCN2UB) | (1<<OCR2UB) | (1<<tCR2Ub)));
+  /*прерывания*/
+  TIMSK |= (1<<TOIE0) | (1<<TOIE2);
 }
 
 /*обработка нажатий кнопки меню-старт*/
