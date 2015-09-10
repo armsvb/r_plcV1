@@ -27,7 +27,7 @@ ISR(TIMER0_OVF_vect)
 }
 
 /*настройка IO*/
-void gpio_init()
+void gpioInit()
 {
   DDRD |= (1<<rele1) |  (1<<rele2) | (1<<rele3) | (0<<btn_start_menu) | (0<<btn_up) | (0<<btn_down) | (0<<btn_ok) | (0<<btn_back);
   PORTD |= rele_off | (1 << btn_start_menu) | (1<<btn_up) | (1<<btn_down) | (1<<btn_ok) | (1<<btn_back);
@@ -36,13 +36,13 @@ void gpio_init()
 }
 
 /*настройка SPI*/
-void spi_init()
+void spiInit()
 {
   SPCR = 0b01110011;
 }
 
 /*настройка таймеров*/
-void timer_init()
+void timerInit()
 {
   /*таймер Т0*/
   TCCR0 |= 1<<CS01;
@@ -52,7 +52,7 @@ void timer_init()
 }
 
 /*обработка нажатий кнопки меню-старт*/
-void working_button()
+void pressButton()
 {
 	if((PIND & (1<<btn_start_menu))==0)
   {
@@ -77,9 +77,9 @@ void working_button()
 int main(void)
 {
   cli();
-  gpio_init();
-  spi_init();
-  timer_init();
+  gpioInit();
+  spiInit();
+  timerInit();
   sei();
   while(1)
   {
@@ -87,13 +87,13 @@ int main(void)
     while(!auto_menu)
     {
       send_buffer(0,1,2,3);
-	    working_button();
+	    pressButton();
 	    //_delay_ms(50);
     }
 	  while(auto_menu)
     {
   		//menu_init();
-  		working_button();
+  		pressButton();
   		menu();
   		//_delay_ms(50);
     }

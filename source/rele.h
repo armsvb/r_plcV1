@@ -11,6 +11,7 @@
 #ifndef RELE_H_
 #define RELE_H_
 
+/*инклудим*/
 #include <avr/io.h>
 #include <stdbool.h>
 #include "stdint.h"
@@ -20,10 +21,10 @@
 #include <stdint.h>
 
 /*основные*/
-void gpio_init();
-void spi_init();
-void timer_init();
-void working_button();
+void gpioInit();
+void spiInit();
+void timeIinit();
+void pressButton();
 
 /*индикация*/
 void send_buffer(uint8_t num1, uint8_t num2, uint8_t num3, uint8_t num4);
@@ -69,7 +70,7 @@ bool int_to_bool(uint8_t int_to);
 #define led1_off (0<<led1)
 #define led2_off (0<<led2)
 #define led3_off (0<<led3)
-#define rele_off  led1_off | led2_off | led3_off
+#define led_off  led1_off | led2_off | led3_off
 
 /*button - start-menu, up, down, back, ok*/
 #define btn_start_menu PD4
@@ -121,4 +122,28 @@ static volatile uint8_t setting_rele[3][8] =
   */
   {0,0,0,0,0,0,0,},
 };
+
+/*допустимые пределы - верхний и нижний настроек меню*/
+/*верхний предел*/
+uint8_t settingMenuUp[3][8] =
+{
+  {99,12,31,24,60,3,99,},
+  {1,3,0,0,0,0,0,},
+  {0,0,0,0,0,0,0,},
+}
+
+/*нижний предел*/
+uint8_t settingMenuDown[3][8] =
+{
+  {0,1,1,0,0,0,0,},
+  {0,0,0,0,0,0,0,},
+  {0,0,0,0,0,0,0,},
+}
+
+/*размер первого уровня меню*/
+uint8_t lengthFirstMenuGr = 3;
+
+/*размер 2 уровня меню*/
+uint8_t lengthMenuSecond[4] = {7,7,3};
+
 #endif /* RELE_H_ */
